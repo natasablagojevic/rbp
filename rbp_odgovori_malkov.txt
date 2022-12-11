@@ -1,0 +1,220 @@
+1.  Cemu sluzi VALUES?
+    VALUES nam sluzi za navodjenje konstantnih tabela
+    VALUES <red1>, <red2>, ..., <redn>
+
+2.  Cemu slizi nedefinisana vrednost?
+    Nedefinisana vrednost (NULL) nema tip. Sluzi da nam kaze da ako
+    recimo nismo izasli na ispit, tada nema smisla govoriti o
+    datumu polaganja, kao i broju poena i oceni, stoga stavljamo 
+    vrednost NULL
+
+3.  Kog tipa je nedefinisana vrednost?
+    Ona nema tip, ali se tumaci kao da je bilo kog tipa, prema konte-
+    kstu u kome se navodi
+
+4.  Kako se porede nedefinisane vrednosti u SQL?
+    Porede se sa IS NULL ili IS NOT NULL
+
+5.  Navesti i objasniti predikate za rad sa nedefinisanim vrednostima.
+
+6.  Objasniti osnovni oblik naredbe SELECT.
+    Ona se sastoji iz sledeceg oblika:
+        SELECT <redovi_koje_izdvajamo>
+        FROM tabela
+        
+    Prvo se dohvatamo tabele koju smo naveli u FROM klauzuli, potom vrsimo
+    izdvajanje samo onih kolona koje nas 
+    zanimaju. Redosled izvrsavanja je sledeci:
+        FROM -> SELECT
+    Takodje u SELECT naredbi moze da se nadje i WHERE klauzula
+    i ona vrsi restrikciju, odnosno izdvaja samo one redove koji 
+    ispunjavaju dati sulov
+
+7.  Objasniti ORDER BY naredbu SELECT.
+    ORDER BY naredba nam sluzi da oredimo podatke u nekom redosledu, 
+    najcesce rastuce ili opadajuce.
+        ORDER BY {<ime> | <rbr> | <exp>} [ASC|DESC] [NULLS {FIRST|LAST}]
+    mozemo da navedemo ime kolone, ili redni broj, ili izraz, potom da je uredimo rastuce=ASC ili opadajuce=DESC i potom ako postoje NULL
+    vrednosti kazemo da se one pokazu prve=FIRST ili zadnje=LAST
+
+8.  Navesti osnovne tipove u SQL.
+    1. celobrjni
+        - smallint (16-bita)
+        - integer ili int (32-bita)
+        - bigint    (64-bita)
+    2. razlomljeni
+        2.1 u pokretnom zarezu
+            - real (32-bita)
+            - double (64-bita)
+            - decfloat(n)       preciznost n = 16 ili 34 cire
+        2.2 u fiksnom zarezu
+            - decimal(n, m)     n - uk. broj cifara, m - broj cifara
+                                desno od zareza
+    3. niske 
+        3.1 jednobajtne
+            - char(n)       fiksne duzine       1 <= n <= 255
+            - varchar(n)    promenljive duzine  n <= 3672
+            - clob(n)       velike do 2GiB - 1
+        3.2 dvobajtne
+            - graphic(n)    fiksne duzine       1 <= n <= 127
+            - vargraphic(n) promenljive duzine  n <= 16336
+            - dbclob(n)     velike  n <= 1GiB - 1
+        3.3 binarne
+            - binary(n)
+            - varbinary(n)
+            - blob(n)
+    4. vremenski 
+        - time          vreme
+        - date          datum 
+        - timestamp     datum i vreme
+    5. logicki
+        - boolean       true/false 
+
+9. Objasniti ukratko aritmeticke operacije sa datumskim i vremenskim 
+    podacima.
+    - Podrazumeva se laberiranje vrednosti sa kojima se radi
+      eksplicitno navodjenje da li se radi o danu, mesecu, godini,
+      satima, minutama, ...
+    
+    - Oduzimanje datuma ima za rezultat 8-cifren broj vrednosti:
+      10000 * <br_celih_godina> + 100 * <meseci> + <dani>
+      => D1 - D2 = RESULT 
+      => D2 + (RESULT/10000) years + (RESULT/100)%100 months + RESULT%100 days = D2
+
+    - Slicno rade vreme:
+      10000 * <sati> + 100 * <min> + <sec> + <milisec>/1000000
+
+10. Cemu sluze i kako se koriste IN i BETWEEN?
+    IN: proverava da li vrednost datog izrada pripada ili ne pripada 
+        datoj listi elemenata
+
+        <exp> [NOT] IN (<list>)
+
+    BETWEEN: proverava da li vrednost datog izraza pripada
+    ili ne pripada datom opsegu, koji obuhvata i granicne vrednosti 
+    => ocena BETEEN 6 AND 10
+
+        <exp> [NOT] BETEEN <exp> AND <exp> 
+
+NOTE:
+    Predikati su izrazi koji izracunavaju logicku vrednost
+
+11. Obajsniti ukratno izraz CASE.
+    Predstavlja uslovni izraz sa vise grana
+    Nalik C-ovskom SWITCH-u 
+        CASE <exp> 
+            WHEN<exp> THEN <exp>
+            [WHEN <exp> THEN <exp>]*
+            [ELSE <exp>]
+        END
+
+        CASE 
+            WHEN <cond> THEN <exp>
+            [WHEN <cond> THEN <exp>]*
+            [ELSE <exp>]
+        END
+    - za implementaciju jednostavnih diskretnih preslikavanja ili 
+      u primenama algoritama sa razlicitim izracunavanjima
+
+12. Cemu slizi i kako se koristi ROWNUMER()?
+    - da li je podatak u nekom redu u odnosu na neko uredjenje 
+    - sluzi da izracunamo redni broj reda u odnosu na izabrani kriterijum
+
+        {ROWNUMER|ROW_NUMBER}() OVER (
+            [PARTITION BY <lista_kolona>]
+            [ORDER BY <lista kolona ili izraza>]
+        )
+13. Sta je spajanje tabela i kada se koristi?
+    - kada zelimo da jednim upitom izdvojimo podatke iz vise tabela 
+      potrebno je da ih spojimo u jednu i tek tada da izdvojimo podatke
+    - spajanje tablea je spajanje svakog reda prve tabele sa svim
+      ostalim redovima druge tabele 
+    
+14. Vrste spajanja.
+    - unutrasnje
+    - spoljasnje 
+    - unakrsno 
+
+15. Kako se izvodi i sta predstavlja unakrsno spajanje tabela?
+    - Odgovara Dekartovom proizvodu tabela - svaki red jedne tabele
+      se spaja sa svakim redom druge tabele 
+    - Odgovara unutrasnjem spajanju za koje je uslov spajanja uvek tacan
+    - MxN 
+        <tab> CROSS JOIN <tab>
+
+16. Kako se izvodi i sta predstavlja unutrasnje spajanje?
+    - spajanje redova jedne tabele sa odovarajucim redovima druge tabele
+      prema datom uslovu spajanja
+    - izdvaja samo one redove svake od date tabele za koje u drugoj
+      tabeli postoji bar jedan odgovarajuci red 
+    - ako za neki red jedne tabele u drugoj ne postoji nijedan odgo-
+      varajuci red, onda se podaci iz tog reda nece pojaviti u 
+      rezultatu
+    - predstavlja preslikavanje skupova 
+        <tab> [INNER] JOIN <tab> ON <cond>
+        <tab> [INNER] JOIN <tab> USING (<lista kolona>)
+    - vrsta odabira redova jedne od tabele, onda taj uslov izbora moze 
+      da se navede bilo u okviru spajanja ili u WHERE kaluzuli 
+      Dobro je navoditi uslov tamo gde ce se lakse razumeti
+
+17. Kako se izvodi i sta predstavlja spoljasnje spajanje?
+    - prosirenje je unutrasnjeg spajanja koje obezbedjuje da se svaki
+      red tabele pojavi bar jednom u rezultatu upita 
+    - ako za neki red jedne tabele ne postoji nijedan odgovarajuci red 
+      druge tabele tada se pravi red drue tabele, tj. sve vrednosti u 
+      redu rezultatu koje odgovaraju drugoj tabeli ce biti nedefinisane
+    - unija skupova 
+    - Vrste:
+        1.  levo spoljasnje spajanje 
+            samo redovi prve (leve) tabele mogu da se spajaju 
+            sa praznim redovima 
+        2.  desno spoljasnje spajanje 
+            smao redovi druge (desne) tabele mogu da se spajaju 
+            sa praznim redovima 
+        3.  puno spoljasnje spajanje
+            redovi obeju tabela mogu da se spajaju sa praznim redovima 
+
+18. Sta su korelirani i s nekoreliranji podupiti?
+    Podpupit je korelisan ako ne moze da stoji kao samostalan upit,
+    tj. ako se u telu podupita na neki nacin referisu elementi 
+    sireg upita 
+
+    PRIMER: nekorelisan
+        select ime, prezime 
+        from dosije 
+        where indeks in (
+            select indeks 
+            from ispit 
+            where idpredmeta = 2348 and status = 'o' and ocena > 5
+        )
+
+    KONECPTUALNO:
+    - nekorelisani upit se izracunava jedanput i zatim se njegov
+      rezultat upotrebljava vise puta 
+    - korelisani upit se za svakog studenta izracunava ponovo 
+      i njegov rezultat se upotrebljava po jedanput
+
+19. Sta su skalarni i vektorski podupiti?
+    - skalarni podupit izracunava tacno jednu vrednost (tj. tabelu 
+      sa jednom kolonom i jednim redom) [spec. slucaj vektorskih]
+        - koriste se na svim mestima gde se koriste i skalari 
+        - navode se izmedju zagrada
+
+    - vektorski podupit izarcunava tacno jednu kolonu
+        - koriste se uobicajeno sa operatorima:
+          IN, ANY, SOME, ALL
+          
+            *IN - proverava da li data vrednost postoji u datom skupu
+            *ANY (SOME sinonim) - proverava da li se data vrednost
+                ispravno poredi datim operatorom poredjenja sa BAR JEDNOM
+                vrednoscu u skupu
+            *ALL - proverava da lu se data vrednost ispravno poredi sa 
+                   datim operatormo poredjenja sa svim vrednostima 
+                   u skupu 
+
+20. Sta su podupiti?
+    Podupit je svaki izraz koji predstavlja upit, a koristi se kao 
+    manji deo kompletnog upita.
+
+21. Objasniti operatore EXITS i NOT EXISTS.
+    
