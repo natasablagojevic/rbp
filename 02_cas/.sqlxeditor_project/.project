@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>.sqlxeditor_project</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>LocalFileLink/1.sql</name>
+			<type>1</type>
+			<location>/home/natasa/Desktop/Projects/rbp/02_cas/1.sql</location>
+		</link>
+		<link>
+			<name>LocalFileLink/Script1.sql</name>
+			<type>1</type>
+			<location>/home/natasa/Desktop/Projects/rbp/Script1.sql</location>
+		</link>
+	</linkedResources>
+</projectDescription>
